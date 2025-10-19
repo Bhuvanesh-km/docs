@@ -8,6 +8,7 @@ import { type Level } from "@tiptap/extension-heading";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { useEditorStore } from "@/store/use-editor-store";
+
 import {
   AlignCenterIcon,
   AlignJustifyIcon,
@@ -20,11 +21,14 @@ import {
   ImageIcon,
   ItalicIcon,
   Link2Icon,
+  ListCollapseIcon,
   ListIcon,
   ListOrderedIcon,
   ListTodoIcon,
   LucideIcon,
   MessageSquarePlusIcon,
+  MinusIcon,
+  PlusIcon,
   PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,
@@ -50,6 +54,129 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+const LineHeightButton = () => {
+  const { editor } = useEditorStore();
+
+  const lineHeights = [
+    { label: "Default", value: "normal" },
+    { label: "Single", value: "1" },
+    { label: "1.15", value: "1.15" },
+    { label: "1.5", value: "1.5" },
+    { label: "1.75", value: "1.75" },
+    { label: "Double", value: "2" },
+  ];
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="flex h-7 min-w-7 shrink-0 flex-col items-center justify-center overflow-hidden rounded-sm px-1.5 text-sm hover:bg-neutral-200/80">
+          <ListCollapseIcon className="size-4" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="flex flex-col gap-y-1 p-1">
+        {lineHeights.map(({ label, value }) => (
+          <DropdownMenuItem
+            key={value}
+            onClick={() => editor?.chain().focus().setLineHeight(value).run()}
+            className={cn(
+              "flex items-center justify-between rounded-sm px-2 py-1 hover:bg-neutral-200/80",
+              editor?.getAttributes("paragraph").lineHeight === value &&
+                "bg-neutral-200/80",
+            )}
+          >
+            <span className="text-sm">{label}</span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+const FontSizeButton = () => {
+  const { editor } = useEditorStore();
+
+  const currentFontSize = editor?.getAttributes("textStyle").fontSize
+    ? editor.getAttributes("textStyle").fontSize.replace("px", "")
+    : "16";
+
+  const [fontSize, setFontSize] = useState(currentFontSize);
+  const [inputValue, setInputValue] = useState(fontSize);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const updateFontSize = (newSize: string) => {
+    const size = parseInt(newSize);
+    if (!isNaN(size) && size > 0 && size !== fontSize) {
+      editor?.chain().focus().setFontSize(`${size}px`).run();
+      setFontSize(newSize);
+      setInputValue(newSize);
+      setIsEditing(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputBlur = () => {
+    updateFontSize(inputValue);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      updateFontSize(inputValue);
+      editor?.commands.focus();
+    } else if (e.key === "Escape") {
+      setInputValue(fontSize);
+      setIsEditing(false);
+    }
+  };
+
+  const increment = () => {
+    const newSize = (parseInt(fontSize) + 1).toString();
+    updateFontSize(newSize);
+  };
+
+  const decrement = () => {
+    const newSize = (parseInt(fontSize) - 1).toString();
+    if (parseInt(newSize) > 0) {
+      updateFontSize(newSize);
+    }
+  };
+
+  return (
+    <div className="item-center flex gap-0.5">
+      <button className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-sm px-1.5 text-sm hover:bg-neutral-200/80">
+        <MinusIcon className="size-4" onClick={decrement} />
+      </button>
+      {isEditing ? (
+        <input
+          type="text"
+          className="h-7 w-10 overflow-hidden rounded-sm border border-neutral-400 bg-transparent px-1.5 text-center text-sm focus:outline-none focus:ring-0"
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          onKeyDown={handleInputKeyDown}
+          autoFocus
+        />
+      ) : (
+        <button
+          onClick={() => {
+            setIsEditing(true);
+            setFontSize(currentFontSize);
+          }}
+          className="h-7 w-10 cursor-text overflow-hidden rounded-sm border border-neutral-400 bg-transparent px-1.5 text-center text-sm"
+        >
+          {currentFontSize}
+        </button>
+      )}
+      <button className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-sm px-1.5 text-sm hover:bg-neutral-200/80">
+        <PlusIcon className="size-4" onClick={increment} />
+      </button>
+    </div>
+  );
+};
 
 const ListButton = () => {
   const { editor } = useEditorStore();
@@ -505,7 +632,7 @@ export const Toolbar = () => {
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       <HeadingLevelButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      {/* TODO Font size */}
+      <FontSizeButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {sections[1].map((item) => (
         <ToolbarButton key={item.label} {...item} />
@@ -516,7 +643,7 @@ export const Toolbar = () => {
       <LinkButton />
       <ImageButton />
       <AlignButton />
-      {/* TODO Line Height */}
+      <LineHeightButton />
       <ListButton />
       {sections[2].map((item) => (
         <ToolbarButton key={item.label} {...item} />

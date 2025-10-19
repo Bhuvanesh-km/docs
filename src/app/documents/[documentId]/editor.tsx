@@ -18,6 +18,9 @@ import TableRow from "@tiptap/extension-table-row";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
 
+import { FontSizeExtension } from "@/extensions/font-size";
+import { LineHeightExtension } from "@/extensions/line-height";
+
 import { useEditorStore } from "@/store/use-editor-store";
 
 export const Editor = () => {
@@ -50,6 +53,8 @@ export const Editor = () => {
     },
     extensions: [
       StarterKit,
+      FontSizeExtension,
+      LineHeightExtension,
       FontFamily,
       TextStyle,
       Highlight.configure({ multicolor: true }),
