@@ -83,44 +83,7 @@ export const Editor = () => {
           "focus:outline-none print:border-0 bg-white border border-[#c7c7c7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text",
       },
     },
-    content: `
-      <h3>
-        Have you seen our tables? They are amazing!
-      </h3>
-      <ul>
-        <li>Tables with rows, cells and headers (optional)</li>
-        <li>Support for <code>colgroup</code> and <code>rowspan</code></li>
-        <li>And even resizable columns (optional)</li>
-      </ul>
-      <p>
-        Here is an example:
-      </p>
-      <table>
-        <tbody>
-          <tr>
-            <th colwidth="200">Name</th>
-            <th colspan="3" colwidth="150,100">Description</th>
-          </tr>
-          <tr>
-            <td>Cyndi Lauper</td>
-            <td>Singer</td>
-            <td>Songwriter</td>
-            <td>Actress</td>
-          </tr>
-          <tr>
-            <td>Marie Curie</td>
-            <td>Scientist</td>
-            <td>Chemist</td>
-            <td>Physicist</td>
-          </tr>
-          <tr>
-            <td>Indira Gandhi</td>
-            <td>Prime minister</td>
-            <td colspan="2">Politician</td>
-          </tr>
-        </tbody>
-      </table>
-    `,
+    content: ``,
     immediatelyRender: false,
   });
 
