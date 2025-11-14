@@ -1,21 +1,22 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
-import { Id } from "../../convex/_generated/dataModel";
 import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import { useState } from "react";
+import { toast } from "sonner";
+import { api } from "../../convex/_generated/api";
+import { Id } from "../../convex/_generated/dataModel";
 
 interface RenameDialogProps {
   documentId: Id<"documents">;
@@ -43,9 +44,11 @@ export const RenameDialog = ({
       });
     } catch (error) {
       console.error(error);
+      toast.error("Failed to rename document");
     } finally {
       setIsRenaming(false);
       setOpen(false);
+      toast.success("Document renamed successfully");
     }
   };
 

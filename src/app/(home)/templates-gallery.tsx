@@ -13,9 +13,10 @@ import { cn } from "@/lib/utils";
 import { templates } from "@/constants/templates";
 
 import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import { api } from "../../../convex/_generated/api";
 
 export const TemplatesGallery = () => {
   const router = useRouter();
@@ -28,8 +29,13 @@ export const TemplatesGallery = () => {
       .then((documentId) => {
         router.push(`/documents/${documentId}`);
       })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Something went wrong");
+      })
       .finally(() => {
         setIsCreating(false);
+        toast.success("New document created");
       });
   };
 

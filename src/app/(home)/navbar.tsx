@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SearchInput } from "./search-input";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, OrganizationSwitcher } from "@clerk/nextjs";
 
 export const NavBar = () => {
   return (
@@ -13,7 +13,15 @@ export const NavBar = () => {
         <h3 className="text-xl">Docs</h3>
       </div>
       <SearchInput />
-      <UserButton />
+      <div className="flex shrink-0 items-center gap-3 pl-3">
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl="/"
+          afterLeaveOrganizationUrl="/"
+          afterSelectOrganizationUrl="/"
+          afterSelectPersonalUrl="/"
+        />
+        <UserButton />
+      </div>
     </nav>
   );
 };
