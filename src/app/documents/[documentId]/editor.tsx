@@ -17,6 +17,10 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
+import {
+  useLiveblocksExtension,
+  FloatingToolbar,
+} from "@liveblocks/react-tiptap";
 
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
@@ -25,6 +29,7 @@ import { useEditorStore } from "@/store/use-editor-store";
 import { Ruler } from "./ruler";
 
 export const Editor = () => {
+  const liveblocks = useLiveblocksExtension();
   const { setEditor } = useEditorStore();
 
   const editor = useEditor({
@@ -53,6 +58,7 @@ export const Editor = () => {
       setEditor(editor);
     },
     extensions: [
+      liveblocks,
       StarterKit,
       FontSizeExtension,
       LineHeightExtension,
