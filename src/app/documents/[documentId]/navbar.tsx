@@ -36,6 +36,7 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { Avatars } from "./avatars";
 import { useEditorStore } from "@/store/use-editor-store";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
@@ -253,6 +254,7 @@ export const NavBar = () => {
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-3 pl-3">
+        <Avatars />
         <OrganizationSwitcher
           afterCreateOrganizationUrl="/"
           afterLeaveOrganizationUrl="/"
