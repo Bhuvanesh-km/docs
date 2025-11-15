@@ -27,6 +27,7 @@ import { LineHeightExtension } from "@/extensions/line-height";
 
 import { useEditorStore } from "@/store/use-editor-store";
 import { Ruler } from "./ruler";
+import { Threads } from "./threads";
 
 export const Editor = () => {
   const liveblocks = useLiveblocksExtension();
@@ -59,7 +60,7 @@ export const Editor = () => {
     },
     extensions: [
       liveblocks,
-      StarterKit,
+      StarterKit.configure({ history: false }),
       FontSizeExtension,
       LineHeightExtension,
       FontFamily,
@@ -98,6 +99,7 @@ export const Editor = () => {
       <Ruler />
       <div className="mx-auto flex w-[816px] min-w-max justify-center py-4 print:w-full print:min-w-0 print:py-0">
         <EditorContent editor={editor} />
+        <Threads editor={editor} />
       </div>
     </div>
   );

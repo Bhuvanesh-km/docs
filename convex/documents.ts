@@ -101,9 +101,18 @@ export const updateById = mutation({
       throw new ConvexError("Document not found");
     }
     const isOwner = document.ownerId === user.subject;
-    if (!isOwner) {
+    const isOrganizationMember = !!(
+      document.organizationId &&
+      document.organizationId === user.organization_id
+    );
+    if (!isOwner && !isOrganizationMember) {
       throw new ConvexError("Unauthorized");
     }
     return await ctx.db.patch(args.id, { title: args.title });
   },
+});
+
+export const getById = query({
+  args: { id: v.id("documents") },
+  handler: async (ctx, { id }) => await ctx.db.get(id),
 });
