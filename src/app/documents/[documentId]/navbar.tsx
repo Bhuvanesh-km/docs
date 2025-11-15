@@ -39,6 +39,7 @@ import {
 import { Avatars } from "./avatars";
 import { useEditorStore } from "@/store/use-editor-store";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { Inbox } from "./inbox";
 
 export const NavBar = () => {
   const { editor } = useEditorStore();
@@ -254,6 +255,7 @@ export const NavBar = () => {
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-3 pl-3">
+        <Inbox />
         <Avatars />
         <OrganizationSwitcher
           afterCreateOrganizationUrl="/"

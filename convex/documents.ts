@@ -2,6 +2,22 @@ import { mutation, query } from "./_generated/server";
 import { paginationOptsValidator } from "convex/server";
 import { ConvexError, v } from "convex/values";
 
+export const getByIds = query({
+  args: { ids: v.array(v.id("documents")) },
+  handler: async (ctx, { ids }) => {
+    const documents = [];
+    for (const id of ids) {
+      const document = await ctx.db.get(id);
+      if (document) {
+        documents.push({ id: document._id, name: document.title });
+      } else {
+        documents.push({ id, name: "[Document Deleted]" });
+      }
+    }
+    return documents;
+  },
+});
+
 export const create = mutation({
   args: {
     title: v.string(),
