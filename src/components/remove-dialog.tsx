@@ -17,6 +17,7 @@ import { useMutation } from "convex/react";
 import { useState } from "react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
+import { useRouter } from "next/navigation";
 
 interface RemoveDialogProps {
   documentId: Id<"documents">;
@@ -24,21 +25,25 @@ interface RemoveDialogProps {
 }
 
 export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
+  const router = useRouter();
   const removeDocument = useMutation(api.documents.removeById);
   const [isRemoving, setIsRemoving] = useState(false);
 
   const onRemove = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    try {
-      setIsRemoving(true);
-      await removeDocument({ id: documentId });
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to remove document");
-    } finally {
-      setIsRemoving(false);
-      toast.success("Document removed successfully");
-    }
+    setIsRemoving(true);
+    removeDocument({ id: documentId })
+      .then(() => {
+        toast.success("Document removed successfully");
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Failed to remove document");
+      })
+      .finally(() => {
+        setIsRemoving(false);
+        router.push("/");
+      });
   };
 
   return (

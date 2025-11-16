@@ -130,5 +130,11 @@ export const updateById = mutation({
 
 export const getById = query({
   args: { id: v.id("documents") },
-  handler: async (ctx, { id }) => await ctx.db.get(id),
+  handler: async (ctx, { id }) => {
+    const document = await ctx.db.get(id);
+    if (!document) {
+      throw new ConvexError("Document not found");
+    }
+    return document;
+  },
 });
