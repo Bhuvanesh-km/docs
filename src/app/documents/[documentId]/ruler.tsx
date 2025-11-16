@@ -2,16 +2,18 @@ import { useRef, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import { useStorage, useMutation } from "@liveblocks/react/suspense";
 
+import { LEFT_MARGIN_DEFAULT, RIGHT_MARGIN_DEFAULT } from "@/constants/margins";
+
 const markers = Array.from({ length: 83 }, (_, i) => i);
 
 export const Ruler = () => {
   const leftMargin = (useStorage<number>((root) => root.leftMargin) ??
-    56) as number;
+    LEFT_MARGIN_DEFAULT) as number;
   const setLeftMargin = useMutation(({ storage }, position: number) => {
     storage.set("leftMargin", position);
   }, []);
   const rightMargin = (useStorage<number>((root) => root.rightMargin) ??
-    56) as number;
+    RIGHT_MARGIN_DEFAULT) as number;
   const setRightMargin = useMutation(({ storage }, position: number) => {
     storage.set("rightMargin", position);
   }, []);
@@ -69,14 +71,14 @@ export const Ruler = () => {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     e.preventDefault();
-    setLeftMargin(56);
+    setLeftMargin(LEFT_MARGIN_DEFAULT);
   };
 
   const handleRightDoubleClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     e.preventDefault();
-    setRightMargin(56);
+    setRightMargin(RIGHT_MARGIN_DEFAULT);
   };
 
   return (

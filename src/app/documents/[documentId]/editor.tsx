@@ -26,14 +26,22 @@ import { LineHeightExtension } from "@/extensions/line-height";
 import { useEditorStore } from "@/store/use-editor-store";
 import { Ruler } from "./ruler";
 import { Threads } from "./threads";
+import { LEFT_MARGIN_DEFAULT, RIGHT_MARGIN_DEFAULT } from "@/constants/margins";
 
-export const Editor = () => {
+interface EditorProps {
+  initialContent?: string;
+}
+
+export const Editor = ({ initialContent }: EditorProps) => {
   const leftMargin = (useStorage<number>((root) => root.leftMargin) ??
-    56) as number;
+    LEFT_MARGIN_DEFAULT) as number;
   const rightMargin = (useStorage<number>((root) => root.rightMargin) ??
-    56) as number;
+    RIGHT_MARGIN_DEFAULT) as number;
 
-  const liveblocks = useLiveblocksExtension();
+  const liveblocks = useLiveblocksExtension({
+    initialContent,
+    offlineSupport_experimental: true,
+  });
   const { setEditor } = useEditorStore();
 
   const editor = useEditor({
@@ -93,7 +101,7 @@ export const Editor = () => {
           "focus:outline-none print:border-0 bg-white border border-[#c7c7c7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text",
       },
     },
-    content: ``,
+    content: initialContent ?? "",
     immediatelyRender: false,
   });
 
