@@ -14,7 +14,7 @@ export async function getDocuments(ids: Id<"documents">[]) {
 export async function getUsers() {
   const { sessionClaims } = await auth();
   const clerk = await clerkClient();
-  const orgId = (sessionClaims as CustomJwtSessionClaims)?.o?.id;
+  const orgId = sessionClaims?.org_id;
   const response = await clerk.users.getUserList({
     organizationId: [orgId as string],
   });
